@@ -51,8 +51,6 @@ public class BlueToothFolder extends BaseActivity {
     }
 
     private void initDrawerList() {
-
-
         BaseAdapter adapter = new BaseAdapter() {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -68,28 +66,21 @@ public class BlueToothFolder extends BaseActivity {
                 holder.fileName.setText(listf.get(position));
                 return convertView;
             }
-
             @Override
             public long getItemId(int position) {
-                // TODO 自动生成的方法存根
                 return position;
             }
-
             @Override
             public Object getItem(int position) {
-                // TODO 自动生成的方法存根
                 return listf.get(position);
             }
-
             @Override
             public int getCount() {
-                // TODO 自动生成的方法存根
                 return listf.size();
             }
         };
         fileList.setAdapter(adapter);
     }
-
 
     static class Holder {
         TextView fileName = null;
