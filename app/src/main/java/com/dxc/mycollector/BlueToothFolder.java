@@ -4,69 +4,112 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dxc.mycollector.dbhelp.SqliteDB;
 import com.dxc.mycollector.serviecs.UserService;
+import com.dxc.mycollector.taskDownload.adapter.ListAdapter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gospel on 2017/8/18.
- * About Login
+ * About BlueToothFolder getReceiveFiles
  */
 public class BlueToothFolder extends Activity {
-    private Button button;//登录按钮
-    private EditText username;
-    private EditText lgpwd;
     Context context;
+    private ListView fileList;//文件列表
+    private List<String> listf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
-        setTitle("Login");
-        button = (Button) findViewById(R.id.login);
-        username = (EditText) findViewById(R.id.username);
-        username.setText("Gospel");
-        lgpwd = (EditText) findViewById(R.id.lgpwd);
-        lgpwd.setText("111111");
+        setContentView(R.layout.show_bluetooth_fileslist_main_layout);
+        fileList = (ListView) findViewById(R.id.showbluetoothfilelistView);
         context = this;
-        /**
-         * 登录按钮的点击事件
-         */
-        button.setOnClickListener(new View.OnClickListener() {
+        String aa = searchFile("");
+        Log.i("bluetoothfile", "onCreate: " + aa);
+        Toast.makeText(this, aa + "--" + listf.size(), Toast.LENGTH_LONG).show();
+        initDrawerList();
+    }
+
+    private void initDrawerList() {
+
+
+        BaseAdapter adapter = new BaseAdapter() {
             @Override
-            public void onClick(View v) {
-                if (username != null && username.length() > 0) {
-                    if (lgpwd != null && lgpwd.length() >= 6 && lgpwd.length() <= 20) {
-                        UserService userServices = new UserService(context);
-//                        boolean isTure = userServices.login(username.getText().toString(), lgpwd.getText().toString());
-                        int isTure = SqliteDB.getInstance(getApplicationContext()).Quer(lgpwd.getText().toString(), username.getText().toString());
-                        if (isTure == 1) {
-                            Toast.makeText(BlueToothFolder.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                            /*登录成功，进入任务下载页面*/
-                            startActivity(new Intent(context, TaskDownloadActivity.class));
-//                            startActivity(new Intent(context, PersonAcitvity.class));
-                        } else if (isTure == 0) {
-                            Toast.makeText(BlueToothFolder.this, "This User is no Register!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(BlueToothFolder.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(BlueToothFolder.this, "密码错误，请重新输入", Toast.LENGTH_SHORT).show();
-                    }
+            public View getView(int position, View convertView, ViewGroup parent) {
+                Holder holder = null;
+                if (convertView == null) {
+                    holder = new Holder();
+                    convertView = LayoutInflater.from(context).inflate(R.layout.show_bluetooth_list_item_layout, null);
+                    holder.fileName = (TextView) convertView.findViewById(R.id.show_bluetoothfile_file_name);
+                    convertView.setTag(holder);
                 } else {
-                    Toast.makeText(BlueToothFolder.this, "username is not null", Toast.LENGTH_SHORT).show();
+                    holder = (Holder) convertView.getTag();
                 }
+                holder.fileName.setText(listf.get(position));
+                return convertView;
             }
-        });
+
+            @Override
+            public long getItemId(int position) {
+                // TODO 自动生成的方法存根
+                return position;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                // TODO 自动生成的方法存根
+                return listf.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                // TODO 自动生成的方法存根
+                return listf.size();
+            }
+        };
+        fileList.setAdapter(adapter);
     }
 
 
-    /*注册*/
-    public void register(View view) {
-        startActivity(new Intent(this, RegisterAcitvity.class));
+    static class Holder {
+        TextView fileName = null;
+    }
+
+    private String searchFile(String keyword) {
+        String path = Environment.getExternalStorageDirectory().getPath();
+        String result = "";
+        File[] files = new File(path + "/bluetooth/").listFiles();
+        listf = new ArrayList<>();
+        for (File file : files) {
+//            if (file.getName().indexOf(keyword) >= 0) {
+            String fn = file.getName();
+            listf.add(fn);
+            result += fn + "\n";// + "(" + file.getPath() + ")\n";
+//            }
+        }
+        if (result.equals("")) {
+            result = "找不到文件!!";
+        }
+        return result;
     }
 }

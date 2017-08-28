@@ -3,6 +3,7 @@ package com.dxc.mycollector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,12 +27,20 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        setTitle("Login");
+
         button = (Button) findViewById(R.id.login);
         username = (EditText) findViewById(R.id.username);
         username.setText("Gospel");
         lgpwd = (EditText) findViewById(R.id.lgpwd);
         lgpwd.setText("111111");
+        Drawable username_drawable = getResources().getDrawable(R.drawable.login);
+        Drawable password_drawable = getResources().getDrawable(R.drawable.lock);
+        //四个参数分别是设置图片的左、上、右、下的尺寸
+        username_drawable.setBounds(0, 0, 50, 50);
+        password_drawable.setBounds(0, 0, 50, 50);
+        //这个是选择将图片绘制在EditText的位置，参数对应的是：左、上、右、下
+        username.setCompoundDrawables(username_drawable, null, null, null);
+        lgpwd.setCompoundDrawables(password_drawable, null, null, null);
         context = this;
         /**
          * 登录按钮的点击事件
@@ -47,8 +56,9 @@ public class MainActivity extends Activity {
                         if (isTure == 1) {
                             Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                             /*登录成功，进入任务下载页面*/
-                            startActivity(new Intent(context, TaskDownloadActivity.class));
-//                            startActivity(new Intent(context, PersonAcitvity.class));
+//                            startActivity(new Intent(context, TaskDownloadActivity.class));
+                            startActivity(new Intent(context, PersonAcitvity.class));
+//                            startActivity(new Intent(context, BlueToothFolder.class));
                         } else if (isTure == 0) {
                             Toast.makeText(MainActivity.this, "This User is no Register!", Toast.LENGTH_SHORT).show();
                         } else {
