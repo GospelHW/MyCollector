@@ -24,7 +24,7 @@ import com.dxc.mycollector.taskDownload.adapter.ListAdapter;
  * About TaskDownload
  */
 
-public class TaskDownloadActivity extends CheckPermissionsActivity {
+public class TaskDownloadActivity extends BaseActivity{
     private ListView listview;
     private EditText nameText;
     private EditText urlText;

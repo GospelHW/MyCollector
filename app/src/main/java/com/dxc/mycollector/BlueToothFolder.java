@@ -33,7 +33,7 @@ import java.util.List;
  * Created by gospel on 2017/8/18.
  * About BlueToothFolder getReceiveFiles
  */
-public class BlueToothFolder extends Activity {
+public class BlueToothFolder extends BaseActivity {
     Context context;
     private ListView fileList;//文件列表
     private List<String> listf;
