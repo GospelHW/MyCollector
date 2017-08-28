@@ -71,15 +71,18 @@ public class BaseActivity extends Activity implements
             public View getView(int position, View convertView, ViewGroup parent) {
                 View layout = View.inflate(getApplicationContext(), R.layout.menu_list_item, null);
                 ImageView imgv = (ImageView) layout.findViewById(R.id.lgface);
+                TextView name1 = (TextView) layout.findViewById(R.id.name1);
                 if (position > 0) {
                     imgv.setVisibility(View.GONE);
+                    name1.setVisibility(View.GONE);
+                    layout.setVisibility(View.VISIBLE);
+                    layout.invalidate();
                 }
                 ImageView face = (ImageView) layout.findViewById(R.id.lgicon);
                 TextView name = (TextView) layout.findViewById(R.id.name);
                 face.setImageResource(imagesId[position]);
                 name.setText(planetTitles[position]);
-                layout.setVisibility(View.VISIBLE);
-                layout.invalidate();
+
                 return layout;
             }
 
