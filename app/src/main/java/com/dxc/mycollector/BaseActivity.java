@@ -121,6 +121,7 @@ public class BaseActivity extends Activity implements
                 startActivity(new Intent(this, TaskDownloadActivity.class));
                 break;
             case 2:
+                startActivity(new Intent(this, BlueToothFolder.class));
                 break;
             case 3:
                 break;
